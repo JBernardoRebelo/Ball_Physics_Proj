@@ -1,20 +1,41 @@
 var canvas, ctx;
 
-var larg, alt; // Largura e altura do canvas
+// Posições iniciais da bolinha
+var xi;
+var yi;
+
+// Posições finais da bolinha
+var xf;
+var yf;
+
+// Largura e altura do canvas
+var larg, alt; 
 
 function init() {
+	
 	window.addEventListener
 	canvas = document.getElementById("cvs");
 	larg = canvas.width;
 	alt = canvas.height;
 	ctx = canvas.getContext("2d");
+	
+	
+	// Começa aqui o novo código -- retirar comment
+	
+	// Definir ponto de partida
+	xi = 0;
+	yi = canvas.height;
+	
+	document.addEventListener("mousedown", mouse);
+	
 	gameLoop();
+
 }
 
 var x;
 var y;
 
-var angulo = 60;
+var angulo = 90;
 var v0 = 17.1;	// Velocidade = 2 pixels por frame
 var x0 = 0;
 var y0 = 0;
@@ -48,7 +69,8 @@ function update(){
 }
 
 function render(){
-	//escrever velocidade e angulo no ecrã
+	
+	// Escrever velocidade e ângulo no ecrã
 	document.getElementById("vel").innerHTML = v0;
 	document.getElementById("ang").innerHTML = angulo;
 	
@@ -71,5 +93,41 @@ function render(){
 	
 }
 
+function mouse(evento)
+{
+		
+	// Incrementar contador a cada clique
+	contador ++;
+	
+	// Se contador for impar
+	if (contador %2 == 1)
+	{
+		// Iguala coordenadas iniciais a xi e yi
+		xi = 0;
+		yi = canvas.height;	
+	}
+	// Se contador for par
+	else
+	{
+		// Iguala coordenadas iniciais a xf e yf
+		xf = evento.pageX - canvas.offsetLeft;
+		yf = evento.pageY - canvas.offsetTop;
+	}
+	
+// Começa aqui o novo código -- retirar comment
 
+// Caixas de informação
+	document.getElementById("caixa2").innerHTML = "Coordenadas Iniciais: (" + xi + "," + yi +")";
+	document.getElementById("caixa").innerHTML = "Coordenadas Finais: (" + xf + "," + yf +")";
+	document.getElementById("caixa3").innerHTML = "Alfa ângulo = " + alfa;
+	
+// Desenhar bolinhas nas linhas
+	ctx.fillStyle = "red";
+	ctx.beginPath();
+	ctx.arc(xi, yi, 5, 0, 2*Math.PI);
+	ctx.arc(xf, yf, 5, 0, 2*Math.PI);
+	ctx.fill();
+	
+
+}
 
