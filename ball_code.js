@@ -30,7 +30,14 @@ function init() {
 	xi = 0;
 	yi = canvas.height;
 	
+	// Deteta rato
 	document.addEventListener("mousedown", mouse);
+	
+// Desenhar retângulo do tamanho do canvas
+	ctx.fillStyle = "#003366";
+	ctx.beginPath();
+	ctx.rect(0,0,larg,alt);
+	ctx.fill();
 
 }
 
@@ -46,8 +53,19 @@ var t = 0;	// Tempo mede nº de frames
 var a = -0.25;	// Aceleração = -0.25 pixel por frame quadrada
 
 
+function gameLoop() {
+	
+	// Cria animação
+	window.requestAnimationFrame(gameLoop);
+	
+	// Chama as funções
+	update();
+	//render();
+	
+}
 
 function update(){
+	
 	// Vars calculadas a partir do angulo e de v0
 	var rad = angulo * Math.PI / 180;  // ângulo convertido para radianos
 	var v0x = v0 * Math.cos(rad);
@@ -60,17 +78,25 @@ function update(){
 	t++;
 
 	if(x > 1040) t=0;
-}
-
-function render(){
 	
 	// Escrever velocidade e ângulo no ecrã
 	document.getElementById("vel").innerHTML = v0;
-	document.getElementById("ang").innerHTML = angulo;
 	
 	//transformação de variaveis
 	var xe = x;
 	var ye = alt - y;
+	
+	// Desenhar bolinha
+	ctx.fillStyle = "white";
+	ctx.beginPath();
+	ctx.arc(xe, ye, 40, 0, 2*Math.PI);
+	ctx.fill();
+	
+}
+/*
+function render(){
+	
+	
 	
 	// RENDER
 	// Desenhar retângulo do tamanho do canvas
@@ -78,17 +104,17 @@ function render(){
 	ctx.beginPath();
 	ctx.rect(0,0,larg,alt);
 	ctx.fill();
-	
-	// Desenhar círculo
-	ctx.fillStyle = "white";
-	ctx.beginPath();
-	ctx.arc(xe, ye, 40, 0, 2*Math.PI);
-	ctx.fill();
-	
-}
 
+}
+*/
+// Começa aqui o novo código -- retirar comment
 function mouse(evento)
-{
+{		
+	
+	
+	
+	// Chamar update e render
+	gameLoop();
 		
 	// Incrementar contador a cada clique
 	continp ++;
@@ -104,17 +130,19 @@ function mouse(evento)
 	else
 	{
 		// Iguala coordenadas iniciais a xf e yf
+		// Onde a bolinha cai e para
 		xf = evento.pageX - canvas.offsetLeft;
 		yf = evento.pageY - canvas.offsetTop;
 	}
 	
-// Começa aqui o novo código -- retirar comment
+
 
 // Caixas de informação
-	document.getElementById("caixa2").innerHTML = "Coordenadas Iniciais: (" + xi + "," + yi +")";
-	document.getElementById("caixa").innerHTML = "Coordenadas Finais: (" + xf + "," + yf +")";
-	document.getElementById("caixa3").innerHTML = "Ângulo = " + angulo;
-	
+	document.getElementById("MostraCoordIniciais").innerHTML = "Coordenadas Iniciais: (" + xi + "," + yi +")";
+	document.getElementById("MostraCoordPedidas").innerHTML = "Coordenadas Finais: (" + xf + "," + yf +")";
+	document.getElementById("MostraAngulo").innerHTML = "Ângulo constante = " + angulo;
+
+
 // Desenhar bolinhas nas linhas
 	ctx.fillStyle = "red";
 	ctx.beginPath();
@@ -122,6 +150,13 @@ function mouse(evento)
 	ctx.arc(xf, yf, 5, 0, 2*Math.PI);
 	ctx.fill();
 	
+	
+// Desenha plataforma de aterragem
+	ctx.fillStyle = "#FFFFFF";
+	ctx.beginPath();
+	ctx.rect(xi, yi, 100, 10);
+	ctx.rect(xf, xf, 100, 10);
+	ctx.fill();
 
 }
 
