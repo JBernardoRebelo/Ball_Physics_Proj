@@ -79,9 +79,6 @@ function update(){
 
 	if(x > 1040) t=0;
 	
-	// Escrever velocidade e ângulo no ecrã
-	document.getElementById("vel").innerHTML = v0;
-	
 	//transformação de variaveis
 	var xe = x;
 	var ye = alt - y;
@@ -138,6 +135,7 @@ function mouse(evento)
 
 
 // Caixas de informação
+	document.getElementById("MostraVelo").innerHTML = "Velocidade da bolinha: (" + v0 +")";
 	document.getElementById("MostraCoordIniciais").innerHTML = "Coordenadas Iniciais: (" + xi + "," + yi +")";
 	document.getElementById("MostraCoordPedidas").innerHTML = "Coordenadas Finais: (" + xf + "," + yf +")";
 	document.getElementById("MostraAngulo").innerHTML = "Ângulo constante = " + angulo;
