@@ -11,6 +11,10 @@ var yf;
 // Largura e altura do canvas
 var larg, alt; 
 
+
+// Conta inputs para saber onde anda
+var continp;
+
 function init() {
 	
 	window.addEventListener
@@ -27,8 +31,6 @@ function init() {
 	yi = canvas.height;
 	
 	document.addEventListener("mousedown", mouse);
-	
-	gameLoop();
 
 }
 
@@ -44,14 +46,6 @@ var t = 0;	// Tempo mede nº de frames
 var a = -0.25;	// Aceleração = -0.25 pixel por frame quadrada
 
 
-function gameLoop() {
-	
-	// Agendar a chamada de gameLoop para a próxima frame
-	window.requestAnimationFrame(gameLoop);
-	// Chamar funções
-	update();
-	render();
-}
 
 function update(){
 	// Vars calculadas a partir do angulo e de v0
@@ -97,10 +91,10 @@ function mouse(evento)
 {
 		
 	// Incrementar contador a cada clique
-	contador ++;
+	continp ++;
 	
 	// Se contador for impar
-	if (contador %2 == 1)
+	if (continp %2 == 1)
 	{
 		// Iguala coordenadas iniciais a xi e yi
 		xi = 0;
@@ -119,7 +113,7 @@ function mouse(evento)
 // Caixas de informação
 	document.getElementById("caixa2").innerHTML = "Coordenadas Iniciais: (" + xi + "," + yi +")";
 	document.getElementById("caixa").innerHTML = "Coordenadas Finais: (" + xf + "," + yf +")";
-	document.getElementById("caixa3").innerHTML = "Alfa ângulo = " + alfa;
+	document.getElementById("caixa3").innerHTML = "Ângulo = " + angulo;
 	
 // Desenhar bolinhas nas linhas
 	ctx.fillStyle = "red";
