@@ -18,20 +18,25 @@ var ball;
 // Velocity x
 var vx = 5.0;
 
-// Velocity y - randomly set
+// Velocity y
 var vy = -10;
    
 var gravity = 0.5; 
  
 function init()
 {	
+	// Drawing canvas
 	canvas = document.getElementById("cvs");
 	larg = canvas.width;
 	alt = canvas.height;
 	ctx = canvas.getContext("2d");
 	
+	// Ball size and position
     ball = {x:canvas.width / 2, y:200, radius:30, status: 0, color:"blue"};
- 
+	
+	// Test Code
+	// Gets mouse
+	document.addEventListener("mousedown", mouse);
 }// End init method
  
  
@@ -58,10 +63,10 @@ function ballMovement()
     ball.y += vy;
     vy += gravity;
         
-    //If either wall is hit, change direction on x axis
+    // If either wall is hit, change direction on x axis or not
     if (ball.x + ball.radius > canvas.width || ball.x - ball.radius < 0)
 	{
-        vx *= -1;
+        vx *= 0;
     } 
         	
     // Ball hits the floor
@@ -77,6 +82,22 @@ function ballMovement()
 		vx=0;   
 	}
 	
+}
+
+// Test Code
+// Gets mouse button and draws platform
+function mouse (event)
+{
+
+var xi = 10; // é suposto estas coordenadas
+var yi = 10; // serem compativeis com a posição do rato
+// e a bola teria q ser spawnada de maneira aq aterra-se em cima da plataforma e para-se
+
+ctx.fillStyle = "#000000";
+ctx.beginPath();
+ctx.rect(xi, yi, 100, 10);
+ctx.fill();
+
 }
  
         </script>
