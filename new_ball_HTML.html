@@ -1,0 +1,84 @@
+<html lang=en>
+<head>
+<meta charset=utf-8>
+    <title>Físicas da bolinha copiado</title>
+    </head>
+    <body onload="init()">
+ 
+<canvas style="border: 1px solid #00000F;" width="1100" height="500" id="cvs">
+</canvas>
+ 
+<script>
+
+var canvas, ctx, container;
+canvas = document.createElement( 'canvas' );
+ctx = canvas.getContext("2d");
+var ball;
+
+// Velocity x
+var vx = 5.0;
+
+// Velocity y - randomly set
+var vy = -10;
+   
+var gravity = 0.5; 
+ 
+function init()
+{	
+	canvas = document.getElementById("cvs");
+	larg = canvas.width;
+	alt = canvas.height;
+	ctx = canvas.getContext("2d");
+	
+    ball = {x:canvas.width / 2, y:200, radius:30, status: 0, color:"blue"};
+ 
+}// End init method
+ 
+ 
+function draw()
+{
+	ctx.clearRect(0,0,canvas.width, canvas.height);		  
+
+    //draw cirlce
+    ctx.beginPath();
+    ctx.arc(ball.x, ball.y, ball.radius, 0, Math.PI*2, false);
+    ctx.fillStyle = ball.color;
+    ctx.fill();
+    ctx.closePath();
+        
+    ballMovement();
+ 
+}
+ 
+setInterval(draw, 1000/35); 
+
+function ballMovement()
+{
+    ball.x += vx;
+    ball.y += vy;
+    vy += gravity;
+        
+    //If either wall is hit, change direction on x axis
+    if (ball.x + ball.radius > canvas.width || ball.x - ball.radius < 0)
+	{
+        vx *= -1;
+    } 
+        	
+    // Ball hits the floor
+    if (ball.y + ball.radius > canvas.height)
+	{  
+        // Re-positioning on the base
+        ball.y = canvas.height - ball.radius;
+        //do this otherwise, ball never stops bouncing
+        if(vy<0 && vy>-2.1)
+		vy=0;
+        //do this otherwise ball never stops on xaxis
+        if(Math.abs(vx)<1.1)
+		vx=0;   
+	}
+	
+}
+ 
+        </script>
+    </body>
+</html>
