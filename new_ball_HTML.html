@@ -10,22 +10,28 @@
  
 <script>
 
+// Makes canvas
 var canvas, ctx, container;
 canvas = document.createElement( 'canvas' );
 ctx = canvas.getContext("2d");
+
+// 
 var ball;
 
-// Velocity x
+// Velocity
 var vx = 5.0;
-
-// Velocity y
 var vy = -10;
    
 var gravity = 0.5; 
 
+// "Bool" -- has only 2 values
 var isPressed = 0.0;
+
+// Initial position
 var xi;
 var yi;
+
+// Platform
 var rectangle;
  
 function init()
@@ -36,33 +42,29 @@ function init()
 	alt = canvas.height;
 	ctx = canvas.getContext("2d");
 	
-	// Test Code
-	// Gets mouse
-	
+	// Gets mouse	
     document.addEventListener("click", mousePressed);
-    
-    setInterval(draw, 1000/60);
-    
-    
-}// End init method
- 
+
+	// Frame rate
+    setInterval(draw, 1000/60);   
+}
  
 function draw()
 {
+	// Clears canvas each frame
 	ctx.clearRect(0,0,canvas.width, canvas.height);		  
 
-    //draw circle
+    // Draw circle
     ctx.beginPath();
     ctx.arc(ball.x, ball.y, ball.radius, 0, Math.PI*2, false);
     ctx.fillStyle = ball.color;
     ctx.fill();
     ctx.closePath();
-    
-    
-    
+ 
     //Draw rectangle on pressedPosition
-    if(isPressed == 1.0){
-        //ctx.beginPath(); acho que nao e preciso isto
+    if(isPressed == 1.0)
+	{
+        //ctx.beginPath();
         rectangle = {x:xi,y:yi,width:100,height:20};
         isPressed = 0.0;
     }
@@ -71,9 +73,7 @@ function draw()
     ctx.fill();
     
     ballMovement();
-      
 }
-
 
 
 function ballMovement()
@@ -86,15 +86,14 @@ function ballMovement()
     // If either wall is hit, change direction on x axis or not
     if (ball.x + ball.radius > canvas.width || ball.x - ball.radius < 0)
 	{
-        vx *= 0;
+        vx = 0;
     }
-    
-    
+       
     //Ball collision with drawn rectangle
-    if(ball.x + 30 >= rectangle.x && ball.x <= (rectangle.x + 100) && ball.y <= rectangle.y && ball.y >= (rectangle.y - 20)){
-        vx *= 0;
-        vy *= 0;
-        
+    if(ball.x + 30 >= rectangle.x && ball.x <= (rectangle.x + 100) && ball.y <= rectangle.y && ball.y >= (rectangle.y - 20))
+	{
+        vx = 0;
+        vy = 0;       
     }
         	
     // Ball hits the floor
@@ -102,35 +101,31 @@ function ballMovement()
 	{  
         // Re-positioning on the base
         ball.y = canvas.height - ball.radius;
-        //do this otherwise, ball never stops bouncing
-        if(vy<0 && vy>-2.1)
-		  vy=0;
-        //do this otherwise ball never stops on xaxis
+        //do this otherwise ball never stops on xAxis
         if(Math.abs(vx)<1.1)
-		  vx=0;   
+		{
+		  vx=0;
+		}
 	}
-	
 }
 
-// Test Code
 // Gets mouse button and draws platform
 function mousePressed (event)
 {
     //Spawn Ball
     ball = {x:30, y:event.clientY, radius:30, status: 0, color:"blue"};
-    
+
     //Restart movement
     vy = -10;
     vx = 5;
-    
-    
+ 
     //currentCoordinates to draw Platform
-    if(isPressed == 0.0){
+    if(isPressed == 0.0)
+	{
         isPressed = 1.0;
         xi = event.clientX;
         yi = event.clientY; 
     }
-    
 
 }
  
