@@ -22,6 +22,11 @@ var vx = 5.0;
 var vy = -10;
    
 var gravity = 0.5; 
+
+var isPressed = 0.0;
+var xi;
+var yi;
+var rectangle;
  
 function init()
 {	
@@ -31,12 +36,14 @@ function init()
 	alt = canvas.height;
 	ctx = canvas.getContext("2d");
 	
-	// Ball size and position
-    ball = {x:canvas.width / 2, y:200, radius:30, status: 0, color:"blue"};
-	
 	// Test Code
 	// Gets mouse
-	document.addEventListener("mousedown", mouse);
+	
+    document.addEventListener("click", mousePressed);
+    
+    setInterval(draw, 1000/60);
+    
+    
 }// End init method
  
  
@@ -44,30 +51,51 @@ function draw()
 {
 	ctx.clearRect(0,0,canvas.width, canvas.height);		  
 
-    //draw cirlce
+    //draw circle
     ctx.beginPath();
     ctx.arc(ball.x, ball.y, ball.radius, 0, Math.PI*2, false);
     ctx.fillStyle = ball.color;
     ctx.fill();
     ctx.closePath();
-        
+    
+    
+    
+    //Draw rectangle on pressedPosition
+    if(isPressed == 1.0){
+        //ctx.beginPath(); acho que nao e preciso isto
+        rectangle = {x:xi,y:yi,width:100,height:20};
+        isPressed = 0.0;
+    }
+    
+    ctx.rect(xi, yi, 100, 20);
+    ctx.fill();
+    
     ballMovement();
- 
+      
 }
- 
-setInterval(draw, 1000/35); 
+
+
 
 function ballMovement()
 {
     ball.x += vx;
     ball.y += vy;
     vy += gravity;
+    
         
     // If either wall is hit, change direction on x axis or not
     if (ball.x + ball.radius > canvas.width || ball.x - ball.radius < 0)
 	{
         vx *= 0;
-    } 
+    }
+    
+    
+    //Ball collision with drawn rectangle
+    if(ball.x + 30 >= rectangle.x && ball.x <= (rectangle.x + 100) && ball.y <= rectangle.y && ball.y >= (rectangle.y - 20)){
+        vx *= 0;
+        vy *= 0;
+        
+    }
         	
     // Ball hits the floor
     if (ball.y + ball.radius > canvas.height)
@@ -76,27 +104,33 @@ function ballMovement()
         ball.y = canvas.height - ball.radius;
         //do this otherwise, ball never stops bouncing
         if(vy<0 && vy>-2.1)
-		vy=0;
+		  vy=0;
         //do this otherwise ball never stops on xaxis
         if(Math.abs(vx)<1.1)
-		vx=0;   
+		  vx=0;   
 	}
 	
 }
 
 // Test Code
 // Gets mouse button and draws platform
-function mouse (event)
+function mousePressed (event)
 {
-
-var xi = 10; // é suposto estas coordenadas
-var yi = 10; // serem compativeis com a posição do rato
-// e a bola teria q ser spawnada de maneira aq aterra-se em cima da plataforma e para-se
-
-ctx.fillStyle = "#000000";
-ctx.beginPath();
-ctx.rect(xi, yi, 100, 10);
-ctx.fill();
+    //Spawn Ball
+    ball = {x:30, y:event.clientY, radius:30, status: 0, color:"blue"};
+    
+    //Restart movement
+    vy = -10;
+    vx = 5;
+    
+    
+    //currentCoordinates to draw Platform
+    if(isPressed == 0.0){
+        isPressed = 1.0;
+        xi = event.clientX;
+        yi = event.clientY; 
+    }
+    
 
 }
  
