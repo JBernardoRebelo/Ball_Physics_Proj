@@ -1,79 +1,57 @@
+// Canvas
 var canvas, ctx;
 
 // Posições iniciais da bolinha
 var xi;
 var yi;
 
-// Posição da plataforma
-var xip;
-var yip;
-
 // Posições finais da bolinha
 var xf;
 var yf;
 
-// Largura e altura do canvas
-var larg, alt; 
-
-// Conta inputs para saber onde anda
-var continp;
-
 var x;
 var y;
 
+// Largura e altura do canvas
+var larg, alt; 
+
+// Conta inputs no mouse
+var continp;
+
+// Transformação de variaveis
+var xe;
+var ye;
+
 var angulo = 90/2;
-var v0 = 17.1;	// Velocidade = 2 pixels por frame
+
+// Velocidade inicial
+var v0 = 17;
 var x0 = 0;
 var y0 = 0;
 
-var t = 0;	// Tempo mede nº de frames
-var a = -0.25;	// Aceleração = -0.25 pixel por frame quadrada
+// Tempo mede nº de frames
+var t = 0;
 
-function init() {
-	
-	window.addEventListener
-	canvas = document.getElementById("cvs");
-	larg = canvas.width;
-	alt = canvas.height;
-	ctx = canvas.getContext("2d");
-	
-	// Definir ponto de partida
-	xi = 0;
-	yi = canvas.height;
-	
-	// Deteta rato
-	document.addEventListener("mousedown", mousePressed);
-	
-	// Desenhar retângulo do tamanho do canvas
-	ctx.fillStyle = "#003366";
-	ctx.beginPath();
-	ctx.rect(0,0,larg,alt);
-	ctx.fill();
-
-}
+// Aceleração = -0.25 pixel por frame quadrada
+var a = -0.25;
 
 function gameLoop()
 {
-	
-	// Cria animação
-	window.requestAnimationFrame(gameLoop);
-	render(); // se tiras isto vês o rasto da bola
-	// Chama as funções
-	update();
-
-	
-}
-
-function update()
-{
-	//transformação de variaveis
-	var xe = x;
-	var ye = alt - y;
-	
+	// Definir as variaveis da função
 	// Vars calculadas a partir do angulo e de v0
 	var rad = angulo * Math.PI / 180;  // ângulo convertido para radianos
 	var v0x = v0 * Math.cos(rad);
 	var v0y = v0 * Math.sin(rad);
+	
+	xe = x;
+	ye = alt - y;
+
+	
+	// Cria animação
+	window.requestAnimationFrame(gameLoop);
+	
+	// "Limpa" canvas a cada frame
+	render();
 	
 	// FORMULA
 	x = x0 + v0x * t;
@@ -91,17 +69,20 @@ function update()
 	ctx.arc(xe, ye, 40, 0, 2*Math.PI);
 	ctx.fill();
 	
-	// Desenhar plataforma, not working
-	ctx.fillStyle = "white";
-	ctx.beginPath;
-	ctx.rect(xip, yip, 100, 20);
-    ctx.fill();
+	// Para parar bolinha quando esta chega ao x e y finais
+	if(xe == xf && ye == yf)
+	{
+		v0 = 0;
+	}
 	
-	
-	
+	if( v0 > 17)
+	{
+		v0 = 0;
+	}
 }
 
-function render(){
+function render()
+{
 	
 	// RENDER
 	// Desenhar retângulo do tamanho do canvas
@@ -114,12 +95,16 @@ function render(){
 
 function mousePressed (event)
 {	
+	xe = 0;
+	ye = 0;
+	t = 0;
+
 	// Chamar update e render
 	gameLoop();
 	
 	// Incrementar contador a cada clique
 	continp ++;
-	
+		
 	// Se contador for impar
 	if (continp %2 == 1)
 	{
@@ -145,12 +130,31 @@ function mousePressed (event)
 	document.getElementById("MostraCoordPedidas").innerHTML = "Coordenadas Finais: (" + xf + "," + yf +")";
 	document.getElementById("MostraAngulo").innerHTML = "Ângulo constante = " + angulo;
 
+}
 
-// Desenha plataforma de aterragem
-	ctx.fillStyle = "#FFFFFF";
+// Iniciando o programa
+function init()
+{
+	
+	// Para detetar o mouse
+	window.addEventListener
+	document.addEventListener("mousedown", mousePressed);
+	
+	// Definir canvas
+	canvas = document.getElementById("cvs");
+	larg = canvas.width;
+	alt = canvas.height;
+	ctx = canvas.getContext("2d");
+			
+	// Desenhar retângulo do tamanho do canvas (fundo)
+	ctx.fillStyle = "#003366";
 	ctx.beginPath();
-	ctx.rect(xip, yip, 100, 10);
-	ctx.rect(xf, xf, 100, 10);
+	ctx.rect(0,0,larg,alt);
 	ctx.fill();
+	
+	// Definir ponto de partida da bolinha
+	xi = 0;
+	yi = canvas.height;
+
 }
 
