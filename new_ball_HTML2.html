@@ -1,0 +1,139 @@
+<html lang=en>
+<head>
+<meta charset=utf-8>
+    <title>Físicas da bolinha copiado</title>
+    </head>
+    <body onload="init()">
+ 
+<canvas style="border: 1px solid #00000F;" width="1100" height="500" id="cvs">
+</canvas>
+ 
+<script>
+
+// Makes canvas
+var canvas, ctx, container;
+canvas = document.createElement( 'canvas' );
+ctx = canvas.getContext("2d");
+
+// 
+var ball;
+
+// Velocity
+var vx = 5.0;
+var vy = -10;
+   
+var gravity = 0.5; 
+
+// "Bool" -- has only 2 values
+var isPressed = 0.0;
+
+// Initial position
+var xi;
+var yi;
+
+// Platform
+var rectangle;
+ 
+function init()
+{	
+	// Drawing canvas
+	canvas = document.getElementById("cvs");
+	larg = canvas.width;
+	alt = canvas.height;
+	ctx = canvas.getContext("2d");
+	
+	// Gets mouse	
+    document.addEventListener("click", mousePressed);
+
+	// Frame rate
+    setInterval(draw, 1000/60);   
+}
+
+function update()
+{
+	
+}
+ 
+function draw()
+{
+	// Clears canvas each frame
+	ctx.clearRect(0,0,canvas.width, canvas.height);		  
+
+    // Draw circle
+    ctx.beginPath();
+    ctx.arc(ball.x, ball.y, ball.radius, 0, Math.PI*2, false);
+    ctx.fillStyle = ball.color;
+    ctx.fill();
+    ctx.closePath();
+ 
+    //Draw rectangle on pressedPosition
+    if(isPressed == 1.0)
+	{
+        //ctx.beginPath();
+        rectangle = {x:xi,y:yi,width:100,height:20};
+        isPressed = 0.0;
+    }
+    
+    ctx.rect(xi, yi, 100, 20);
+    ctx.fill();
+    
+    ballMovement();
+}
+
+
+function ballMovement()
+{
+    ball.x += vx;
+    ball.y += vy;
+    vy += gravity;
+    
+        
+    // If either wall is hit, change direction on x axis or not
+    if (ball.x + ball.radius > canvas.width || ball.x - ball.radius < 0)
+	{
+        vx = 0;
+    }
+       
+    //Ball collision with drawn rectangle
+    if(ball.x + 30 >= rectangle.x && ball.x <= (rectangle.x + 100) && ball.y <= rectangle.y && ball.y >= (rectangle.y - 20))
+	{
+        vx = 0;
+        vy = 0;       
+    }
+        	
+    // Ball hits the floor
+    if (ball.y + ball.radius > canvas.height)
+	{  
+        // Re-positioning on the base
+        ball.y = canvas.height - ball.radius;
+        //do this otherwise ball never stops on xAxis
+        if(Math.abs(vx)<1.1)
+		{
+		  vx=0;
+		}
+	}
+}
+
+// Gets mouse button and draws platform
+function mousePressed (event)
+{
+    //Spawn Ball
+    ball = {x:30, y:500, radius:30, status: 0, color:"blue"};
+ 
+    //currentCoordinates to draw Platform
+    if(isPressed == 0.0)
+	{
+        isPressed = 1.0;
+        xi = event.clientX;
+        yi = event.clientY; 
+    }
+	
+	//Restart movement
+    vy =-21.2
+    vx = vy*-1/7
+
+}
+ 
+        </script>
+    </body>
+</html>

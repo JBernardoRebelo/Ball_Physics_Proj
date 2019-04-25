@@ -4,13 +4,16 @@ var canvas, ctx;
 var xi;
 var yi;
 
+// Posição da plataforma
+var xip;
+var yip;
+
 // Posições finais da bolinha
 var xf;
 var yf;
 
 // Largura e altura do canvas
 var larg, alt; 
-
 
 // Conta inputs para saber onde anda
 var continp;
@@ -39,7 +42,7 @@ function init() {
 	yi = canvas.height;
 	
 	// Deteta rato
-	document.addEventListener("mousedown", mouse);
+	document.addEventListener("mousedown", mousePressed);
 	
 	// Desenhar retângulo do tamanho do canvas
 	ctx.fillStyle = "#003366";
@@ -54,7 +57,7 @@ function gameLoop()
 	
 	// Cria animação
 	window.requestAnimationFrame(gameLoop);
-	render();
+	render(); // se tiras isto vês o rasto da bola
 	// Chama as funções
 	update();
 
@@ -63,6 +66,9 @@ function gameLoop()
 
 function update()
 {
+	//transformação de variaveis
+	var xe = x;
+	var ye = alt - y;
 	
 	// Vars calculadas a partir do angulo e de v0
 	var rad = angulo * Math.PI / 180;  // ângulo convertido para radianos
@@ -74,17 +80,22 @@ function update()
 	y = y0 + v0y * t + 1/2 * a * t*t;
 	t++;
 
-	if(x > 1040) t=0;
-	
-	//transformação de variaveis
-	var xe = x;
-	var ye = alt - y;
+	if(x > 1040)
+	{
+		t=0;
+	}	
 	
 	// Desenhar bolinha
 	ctx.fillStyle = "white";
 	ctx.beginPath();
 	ctx.arc(xe, ye, 40, 0, 2*Math.PI);
 	ctx.fill();
+	
+	// Desenhar plataforma, not working
+	ctx.fillStyle = "white";
+	ctx.beginPath;
+	ctx.rect(xip, yip, 100, 20);
+    ctx.fill();
 	
 	
 	
@@ -101,8 +112,8 @@ function render(){
 
 }
 
-function mouse(evento)
-{		
+function mousePressed (event)
+{	
 	// Chamar update e render
 	gameLoop();
 	
@@ -114,35 +125,31 @@ function mouse(evento)
 	{
 		// Iguala coordenadas iniciais a xi e yi
 		xi = 0;
-		yi = canvas.height;	
+		yi = canvas.height;
+		
+        xip = event.clientX;
+        yip = event.clientY;
 	}
 	// Se contador for par
 	else
 	{
 		// Iguala coordenadas iniciais a xf e yf
-		// Onde a bolinha cai e para
-		xf = evento.pageX - canvas.offsetLeft;
-		yf = evento.pageY - canvas.offsetTop;
+		// Onde a bolinha cai e para // SUPOSTAMENTE
+		xf = event.pageX - canvas.offsetLeft;
+		yf = event.pageY - canvas.offsetTop;
 	}
 	
-
 // Caixas de informação
 	document.getElementById("MostraVelo").innerHTML = "Velocidade da bolinha: (" + v0 +")";
 	document.getElementById("MostraCoordIniciais").innerHTML = "Coordenadas Iniciais: (" + xi + "," + yi +")";
 	document.getElementById("MostraCoordPedidas").innerHTML = "Coordenadas Finais: (" + xf + "," + yf +")";
 	document.getElementById("MostraAngulo").innerHTML = "Ângulo constante = " + angulo;
 
-// Desenhar bolinhas nas linhas
-	ctx.fillStyle = "red";
-	ctx.beginPath();
-	ctx.arc(xi, yi, 5, 0, 2*Math.PI);
-	ctx.arc(xf, yf, 5, 0, 2*Math.PI);
-	ctx.fill();	
-	
+
 // Desenha plataforma de aterragem
 	ctx.fillStyle = "#FFFFFF";
 	ctx.beginPath();
-	ctx.rect(xi, yi, 100, 10);
+	ctx.rect(xip, yip, 100, 10);
 	ctx.rect(xf, xf, 100, 10);
 	ctx.fill();
 }
