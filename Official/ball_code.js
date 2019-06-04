@@ -4,6 +4,9 @@ var canvas, ctx;
 // Posições
 var xf, yf, x, y;
 
+// Plat arrays
+var plat = new Array(); // ***********
+
 // Largura e altura do canvas
 var larg, alt; 
 
@@ -43,12 +46,17 @@ function init()
 	larg = canvas.width;
 	alt = canvas.height;
 	ctx = canvas.getContext("2d");
-			
+		
 	// Desenhar retângulo do tamanho do canvas (fundo)
 	ctx.fillStyle = "#003366";
 	ctx.beginPath();
 	ctx.rect(0,0,larg,alt);
 	ctx.fill();
+	
+	// Criar as plataformas
+	plat.push( new Plataforma(200, 200, 200, 20) ); // ***************
+	plat.push( new Plataforma(600, 200, 200, 20) );
+	plat.push( new Plataforma(400, 600, 400, 20) );
 }
 
 function gameLoop()
@@ -98,10 +106,19 @@ function render()
 	ctx.beginPath();
 	ctx.arc(xe, ye, 40, 0, 2*Math.PI);
 	ctx.fill();
+	
+	// Desenhar as plataformas
+	for(var i in plat) {
+		plat[i].desenha(ctx);
+	}
 }
 
 function mousePressed (event)
 {	
+	var dentro = false;
+	var xf = event.clientX - canvas.offsetLeft;
+	var yf = event.clientY - canvas.offsetTop;
+	
 	// Redefinir variaveis	
 	xe = 0;
 	ye = 0;
@@ -130,6 +147,14 @@ function mousePressed (event)
 	angComplementarBz = angComplementar/2;
 	bissetriz = 90 - angComplementarBz;
 
+	// Testar se o toque foi dentro de uma plataforma	***************
+	for(var i in plat) {
+		if(plat[i].dentro(xf, yf)) {
+			dentro = true;
+			break;
+		}
+	}
+
 	// Caixas de informação
 	document.getElementById("MostraVelo").innerHTML = "Velocidade da bolinha: (" + v0 +")";
 	document.getElementById("MostraCoordPedidas").innerHTML = "Coordenadas Finais: (" + xf + "," + yf +")";
@@ -137,7 +162,10 @@ function mousePressed (event)
 	document.getElementById("MostraAviso").innerHTML = "Nota: Carrega 2 vezes no mesmo ponto para definir o destino da bolinha";
 	document.getElementById("Creditos").innerHTML = "Trabalho por:";
 	document.getElementById("Creditos2").innerHTML = "João Rebelo a21805230 e Guilherme Saturno a21700118";
+	document.getElementById("DentroFora1").innerHTML = "Em relação às plataformas o rato ficou...";
+	var dentrofora = document.getElementById("DentroFora");	
 	
+	dentrofora.innerHTML = dentro ? "dentro" : "fora";
 }
 
 // Classe Plataforma
