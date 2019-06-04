@@ -9,7 +9,7 @@ function Plataforma(x, y, larg, alt) {
 
 	this.desenha = desenha;
 	function desenha(ctx) {
-		ctx.strokeStyle = "black";
+		ctx.fillStyle = "black";
 		ctx.beginPath();
 		ctx.rect(x, y, larg, alt);
 		ctx.stroke();
