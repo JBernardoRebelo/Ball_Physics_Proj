@@ -1,17 +1,9 @@
 // Canvas
 var canvas, ctx;
-
-// Posições
-var xf, yf, x, y;
-
-// Plat arrays
-var plat = new Array(); // ***********
-
-// Largura e altura do canvas
-var larg, alt; 
-
-// Transformação de variaveis
-var xe, ye;
+var xf, yf, x, y; 		// Posições		
+var plat = new Array(); // Plat arrays// ***********
+var larg, alt; 			// Largura e altura do canvas
+var xe, ye; 			// Transformação de variaveis
 
 //Definir angulo
 var angulo;
@@ -25,22 +17,18 @@ var v0 = 17;
 var x0 = 0;
 var y0 = 0;
 
-//Tangente 
-var tang;
+var tang; 				//Tangente 
+var t = 0; 				// Tempo mede nº de frames
+var a = -0.25; 			// Aceleração = -0.25 pixel por frame quadrada
 
-// Tempo mede nº de frames
-var t = 0;
-
-// Aceleração = -0.25 pixel por frame quadrada
-var a = -0.25;
 
 // Iniciando o programa
 function init()
 {
 	alert("Carregar 3 vezes para começar")
-	// Para detetar o mouse
-	document.addEventListener("mousedown", mousePressed);
 	
+	// Para detetar o mouse
+	document.addEventListener("mousedown", mousePressed);	
 	// Definir canvas
 	canvas = document.getElementById("cvs");
 	larg = canvas.width;
@@ -79,7 +67,6 @@ function gameLoop()
 	y = y0 + v0y * t + 1/2 * a * t*t;
 	t++;
 	
-	
 	// Cria animação
 	if(xe < xf)
 	{
@@ -114,9 +101,9 @@ function render()
 }
 
 function mousePressed (event)
-{	
-	var dentro = false;
-	
+{		
+	var dentro = false; // Verifica se foi clicado dentro de uma plataform
+	var dentrofora;
 	// Chamar update e render
 	gameLoop();
 
@@ -134,26 +121,31 @@ function mousePressed (event)
 	
 	if (dentro)
 	{
-	// Redefinir variaveis	
-	xe = 0;
-	ye = 0;
-	t = 0;
-	
-	v0 = 17;
-	x0 = 0;
-	y0 = 0;
-	
-	//Velocidade
-	tang = Math.tan(bissetriz * Math.PI / 180);
-	v0 = Math.sqrt(xf *(-a) * tang);
-	
-	//Angulo bissetriz entre 90° e o vetor
-	alfa = Math.atan2(yf-alt, xf);
-	alfa = - alfa / Math.PI * 180;
-    alfa = Math.round(alfa * 1000) / 1000;
-	angComplementar = 90 - alfa;
-	angComplementarBz = angComplementar/2;
-	bissetriz = 90 - angComplementarBz;
+		// Redefinir variaveis	
+		xe = 0;
+		ye = 0;
+		t = 0;
+		
+		v0 = 17;
+		x0 = 0;
+		y0 = 0;
+		
+		//Velocidade
+		tang = Math.tan(bissetriz * Math.PI / 180);
+		v0 = Math.sqrt(xf *(-a) * tang);
+		
+		//Angulo bissetriz entre 90° e o vetor
+		alfa = Math.atan2(yf-alt, xf);
+		alfa = - alfa / Math.PI * 180;
+		alfa = Math.round(alfa * 1000) / 1000;
+		angComplementar = 90 - alfa;
+		angComplementarBz = angComplementar/2;
+		bissetriz = 90 - angComplementarBz;
+		
+		if (!dentro)
+		{
+			
+		}
 	}
 	
 	// Caixas de informação
@@ -164,9 +156,9 @@ function mousePressed (event)
 	document.getElementById("Creditos").innerHTML = "Trabalho por:";
 	document.getElementById("Creditos2").innerHTML = "João Rebelo a21805230 e Guilherme Saturno a21700118";
 	document.getElementById("DentroFora1").innerHTML = "Em relação às plataformas o rato ficou...";
-	var dentrofora = document.getElementById("DentroFora");	
-	
-	dentrofora.innerHTML = dentro ? "dentro" : "fora";
+	dentrofora = document.getElementById("DentroFora");	
+	dentrofora.innerHTML = dentro ? "dentro" : "fora"; 	// Escreve dentro ou fora consoante o que foi clicado
+
 }
 
 // Código por: João Rebelo, Guilherme Saturno
