@@ -35,16 +35,17 @@ function init()
 	alt = canvas.height;
 	ctx = canvas.getContext("2d");
 		
-	// Desenhar retângulo do tamanho do canvas (fundo)
-	ctx.fillStyle = "#003366";
-	ctx.beginPath();
-	ctx.rect(0,0,larg,alt);
-	ctx.fill();
-	
+	// Desenha fundo
+	fundo = new Image();
+	fundo.src = "fundo.jpg";
+		
 	// Criar as plataformas
-	plat.push( new Plataforma(200, 200, 200, 20) ); // ***************
-	plat.push( new Plataforma(600, 200, 200, 20) );
-	plat.push( new Plataforma(400, 600, 400, 20) );
+	plat.push( new Plataforma(429, 152, 242, 35) ); // Top
+	plat.push( new Plataforma(309, 280, 189, 35) ); // Left
+	plat.push( new Plataforma(602, 280, 180, 35) ); // Right
+	plat.push( new Plataforma(495, 410, 111, 32) ); // Bottom
+	
+
 }
 
 function gameLoop()
@@ -76,11 +77,8 @@ function gameLoop()
 
 function render()
 {
-	// Desenhar retângulo do tamanho do canvas
-	ctx.fillStyle = "#003366";
-	ctx.beginPath();
-	ctx.rect(0,0,larg,alt);
-	ctx.fill();
+	// Desenhar o fundo
+	ctx.drawImage(fundo, -90, -60);
 
 	//Ponto na tela
 	ctx.fillStyle = "red";
@@ -111,7 +109,7 @@ function mousePressed (event)
 	xf = event.pageX - canvas.offsetLeft;
 	yf = event.pageY - canvas.offsetTop;
 
-	// Testar se o toque foi dentro de uma plataforma	***************
+	// Testar se o toque foi dentro de uma plataforma
 	for(var i in plat) {
 		if(plat[i].dentro(xf, yf)) {
 			dentro = true;
