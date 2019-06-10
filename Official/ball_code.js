@@ -1,7 +1,7 @@
 // Canvas
 var canvas, ctx;
 var xf, yf, x, y; 		// Posições		
-var plat = new Array(); // Plat arrays// ***********
+var plat = new Array(); // Plat arrays
 var larg, alt; 			// Largura e altura do canvas
 var xe, ye; 			// Transformação de variaveis
 
@@ -21,6 +21,7 @@ var tang; 				//Tangente
 var t = 0; 				// Tempo mede nº de frames
 var a = -0.25; 			// Aceleração = -0.25 pixel por frame quadrada
 
+var movimento = false;
 
 // Iniciando o programa
 function init()
@@ -72,6 +73,13 @@ function gameLoop()
 	if(xe < xf)
 	{
 		window.requestAnimationFrame(gameLoop);
+	}
+	
+	if(movimento) t++;
+
+	if(x<0 || x>larg || y<0 || y>alt) {
+		movimento = false;
+		t = 0;
 	}
 }
 
@@ -140,8 +148,30 @@ function mousePressed (event)
 		angComplementarBz = angComplementar/2;
 		bissetriz = 90 - angComplementarBz;
 		
-		if (!dentro)
+		if(xe != 0) // Se estiver numa plataforma
 		{
+			if(movimento) return;
+			
+			var theta;
+			var xf = event.clientX - canvas.offsetLeft;
+			var yf = alt - (event.clientY - canvas.offsetTop);
+			var alfa = Math.atan2(yf-y, xf-x);
+			var alfag = alfa * 180 / Math.PI;
+			
+			//alert ("I am working");
+			
+			if(alfag >= 0 && alfag <= 90) theta = (alfag + 90) / 2;		// 1º Quadrante
+			if(alfag > 90 && alfag <= 180) theta = (alfag + 90) / 2;	// 2º Quadrante
+			if(alfag >= -180 && alfag < -90) theta = (alfag - 180) / 2;	// 3º Quadrante
+			if(alfag >= -90 && alfag < 0) theta = alfag / 2;			// 4º Quadrante
+			
+			// Calcular velocidade
+			yf = event.clientY - canvas.offsetTop;  // yf sem ser corrigido com ALT
+			rtheta = theta * Math.PI / 180;
+			var raiz = -a/2*Math.pow(xf-x0,2) / ((yf-y0)*Math.pow(Math.cos(rtheta),2)+Math.sin(rtheta)*Math.cos(rtheta)*(xf-x0));
+			v0 = Math.sqrt(raiz);
+			
+			movimento = true;
 			
 		}
 	}
